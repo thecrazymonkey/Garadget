@@ -60,6 +60,7 @@ preferences {
 
 mappings {
 	path("/receivedToken"){action: [POST: "receivedToken", GET: "receivedToken"]}
+	path("/doorStatus")       {action: [ POST: "doorStatus"] }
 }
 
 def startPage() {
@@ -83,7 +84,16 @@ def mainPage(){
 
 
     if(result.success == true) {
-           		return completePage()
+        def configJson = new groovy.json.JsonOutput().toJson([
+                accessToken:  state.accessToken,
+                appId:        app.id,
+                ide:		"https://graph.api.smartthings.com"
+
+        ])
+
+        def configString = new groovy.json.JsonOutput().prettyPrint(configJson)
+        log.debug "Access token: ${configString}"
+        return completePage()
 	} else {
     			return badAuthPage()
 	}
@@ -240,6 +250,12 @@ def receivedToken() {
         """
 	render contentType: 'text/html', data: html
 }
+
+def doorStatus() {
+    def requestJSON = request.JSON
+    log.debug "Reported status json: $requestJSON"
+}
+
 
 def getDeviceList() {
 	def garadgetDevices = []
