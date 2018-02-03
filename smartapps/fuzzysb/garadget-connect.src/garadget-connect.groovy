@@ -254,6 +254,8 @@ def receivedToken() {
 def doorStatus() {
     def requestJSON = request.JSON
     log.debug "Reported status json: $requestJSON"
+    def paramsJSON = params.JSON
+    log.debug "Reported params status json: $paramsJSON"
 }
 
 
