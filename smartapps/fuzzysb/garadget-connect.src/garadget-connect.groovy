@@ -322,8 +322,8 @@ def initialize() {
 
 	// Do the initial poll
 	poll()
-	// Schedule it to run every 1 minutes
-	runEvery1Minute("poll")
+	// Schedule it to run every 5 minutes - the status change related calls will be triggered  by WH
+	runEvery5Minutes("poll")
 }
 
 def getToken(garadgetUsername, garadgetPassword){
