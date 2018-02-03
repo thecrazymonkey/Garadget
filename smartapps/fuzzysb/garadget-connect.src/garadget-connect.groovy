@@ -255,8 +255,10 @@ def doorStatus() {
     def requestJSON = request.JSON
     log.debug "Reported status json: $requestJSON"
     log.debug "Reported coreid: ${request.JSON?.coreid}"
-    def triggeredDev = getChildDevice(request.JSON?.coreid)
-    log.debug "Triggered device: $triggeredDev"
+    def triggeredDev = getAllChildDevices()
+    triggeredDev.each {
+        log.debug "Triggered device: ${it.getDeviceNetworkId()}"
+    }
 }
 
 
