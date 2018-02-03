@@ -166,7 +166,6 @@ private parseDoorStatusResponse(resp) {
         	sendEvent(name: 'contact', value: status, displayed: false)
             }
         def time = timevalues[1]
-        log.debug("parseDoorStatusResponse:lastAction: "+time)
         sendEvent(name: 'lastAction', value: time)
         def sensor = sensorvalues[1]
         sendEvent(name: 'reflection', value: sensor)
