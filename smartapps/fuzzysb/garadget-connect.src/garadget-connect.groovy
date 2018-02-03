@@ -254,6 +254,8 @@ def receivedToken() {
 def doorStatus() {
     def requestJSON = request.JSON
     log.debug "Reported status json: $requestJSON"
+    def triggeredDev = getChildDevice(request.JSON?.coreid)
+    log.debug "Triggered device: $triggeredDev"
 }
 
 
@@ -394,7 +396,6 @@ def poll() {
 	log.debug "Executing - Service Manager - poll() - "
 //	getDeviceList();
 	getAllChildDevices().each {
-        log.debug "Executing - Service Manager - poll() - $it"
         it.statusCommand()
 	}
 }
