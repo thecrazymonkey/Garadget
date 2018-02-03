@@ -255,9 +255,11 @@ def doorStatus() {
     def requestJSON = request.JSON
     log.debug "Reported status json: $requestJSON"
     log.debug "Reported coreid: ${request.JSON?.coreid}"
+    log.debug "Reported status: ${request.JSON?.status}"
     getAllChildDevices().each {
         if (it.getDeviceNetworkId().contains(request.JSON?.coreid) == true) {
             log.debug "Found device: ${it}"
+//            it.parseWHDoorStatus(requestJSON)
         }
     }
 }
