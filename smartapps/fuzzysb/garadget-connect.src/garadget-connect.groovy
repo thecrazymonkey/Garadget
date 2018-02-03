@@ -254,7 +254,6 @@ def receivedToken() {
 def doorStatus() {
     def requestJSON = request.JSON
     log.debug "Reported status json: $requestJSON"
-    log.debug "Reported params: $params"
 }
 
 
@@ -393,8 +392,9 @@ private parseResponse(resp) {
 
 def poll() {
 	log.debug "Executing - Service Manager - poll() - "
-	getDeviceList();
+//	getDeviceList();
 	getAllChildDevices().each {
+        log.debug "Executing - Service Manager - poll() - $it"
         it.statusCommand()
 	}
 }
