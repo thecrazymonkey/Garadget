@@ -252,14 +252,11 @@ def receivedToken() {
 }
 
 def doorStatus() {
-    def requestJSON = request.JSON
-    log.debug "Reported status json: $requestJSON"
-    log.debug "Reported coreid: ${request.JSON?.coreid}"
-    log.debug "Reported status: ${request.JSON?.status}"
+    log.debug "Reported status json: ${request.JSON}"
     getAllChildDevices().each {
         if (it.getDeviceNetworkId().contains(request.JSON?.coreid) == true) {
             log.debug "Found device: ${it}"
-//            it.parseWHDoorStatus(requestJSON)
+            it.parseWHDoorStatus(request.JSON)
         }
     }
 }

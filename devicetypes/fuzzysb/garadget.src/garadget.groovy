@@ -137,6 +137,18 @@ def configure() {
 	SetConfigCommand()
 }
 
+// Parse incoming webhook even
+private parseWHDoorStatus(req) {
+    def status = req?.status
+    log.debug("Executing parseWHDoorStatus: "+status)
+    sendEvent(name: 'status', value: status)
+    if(status == "open" || status == "closed"){
+        sendEvent(name: 'contact', value: status, displayed: false)
+    }
+    def time = 0s
+    sendEvent(name: 'lastAction', value: time)
+}
+
 // Parse incoming device messages to generate events
 private parseDoorStatusResponse(resp) {
     log.debug("Executing parseDoorStatusResponse: "+resp.data)
@@ -345,7 +357,7 @@ def on() {
 
 	log.debug ("Executing - on()")
 	openCommand()
-
+/*
     def buttonPressTime =  new Date()
     def myDelay = (state.mtt).toInteger()
     def laterTime = new Date(now() + myDelay + 2000)
@@ -358,6 +370,7 @@ def on() {
 
     runOnce(laterTime, statusCommand, [overwrite: false])
     log.debug ("Executing - on() - runOnce(statusCommand)")
+*/
 }
 
 def off() {
@@ -368,7 +381,7 @@ def off() {
 
 	log.debug ("Executing - off()")
 	closeCommand()
-
+/*
     def buttonPressTime =  new Date()
     def myDelay = (state.mtt).toInteger()
     def laterTime = new Date(now() + myDelay + 2000)
@@ -381,6 +394,7 @@ def off() {
 
     runOnce(laterTime, statusCommand, [overwrite: false])
     log.debug ("Executing - off() - runOnce(statusCommand)")
+*/
 }
 
 def stop(){
