@@ -245,10 +245,12 @@ def receivedToken() {
 def doorStatus() {
     log.debug "Reported status json: ${request.JSON}"
     // only coreid and status available
-    getAllChildDevices().each {
-        if (it.getDeviceNetworkId().contains(request.JSON?.coreid) == true) {
-            log.debug "Found device: ${it}"
-            it.parseWHDoorStatus(request.JSON)
+    if (request.JSON?.coreid != null) {
+        getAllChildDevices().each {
+            if (it.getDeviceNetworkId().contains(request.JSON?.coreid) == true) {
+                log.debug "Found device: ${it}"
+                it.parseWHDoorStatus(request.JSON)
+            }
         }
     }
 }
