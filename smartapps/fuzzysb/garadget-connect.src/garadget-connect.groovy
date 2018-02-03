@@ -84,15 +84,6 @@ def mainPage(){
 
 
     if(result.success == true) {
-        def configJson = new groovy.json.JsonOutput().toJson([
-                accessToken:  state.accessToken,
-                appId:        app.id,
-                ide:		"https://graph.api.smartthings.com"
-
-        ])
-
-        def configString = new groovy.json.JsonOutput().prettyPrint(configJson)
-        log.debug "Access token: ${configString}"
         return completePage()
 	} else {
     			return badAuthPage()

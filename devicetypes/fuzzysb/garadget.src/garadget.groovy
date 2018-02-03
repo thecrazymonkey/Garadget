@@ -137,7 +137,7 @@ def configure() {
 	SetConfigCommand()
 }
 
-// Parse incoming webhook even
+// Parse incoming webhook event
 private parseWHDoorStatus(req) {
     def status = req?.status
     log.debug("parseWHDoorStatus: started "+status)
