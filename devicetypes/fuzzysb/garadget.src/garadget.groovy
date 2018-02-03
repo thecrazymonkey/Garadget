@@ -141,18 +141,18 @@ def configure() {
 private parseWHDoorStatus(req) {
     def status = req?.status
     log.debug("parseWHDoorStatus: started "+status)
-/*
     sendEvent(name: 'status', value: status)
     if(status == "open" || status == "closed"){
         sendEvent(name: 'contact', value: status, displayed: false)
     }
     def time = '0s'
     sendEvent(name: 'lastAction', value: time)
-*/
-    // just schedule status call and let the WH processing return asap
+/*
+    // if you want more fancy then just schedule status call and let the WH processing return asap
     def laterTime = new Date(now() + 1000)
     log.debug ("Schedule status check: "+laterTime)
     runOnce(laterTime, statusCommand, [overwrite: true])
+*/
     log.debug ("parseWHDoorStatus: done")
 }
 

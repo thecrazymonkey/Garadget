@@ -253,6 +253,7 @@ def receivedToken() {
 
 def doorStatus() {
     log.debug "Reported status json: ${request.JSON}"
+    // only coreid and status available
     getAllChildDevices().each {
         if (it.getDeviceNetworkId().contains(request.JSON?.coreid) == true) {
             log.debug "Found device: ${it}"
@@ -322,8 +323,8 @@ def initialize() {
 
 	// Do the initial poll
 	poll()
-	// Schedule it to run every 5 minutes - the status change related calls will be triggered  by WH
-	runEvery5Minutes("poll")
+	// Schedule it to run every 1 minutes
+	runEvery1Minute("poll")
 }
 
 def getToken(garadgetUsername, garadgetPassword){
