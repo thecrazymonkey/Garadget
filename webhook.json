@@ -1,0 +1,15 @@
+{
+  "event": "state",
+  "url": "https://graph-na02-useast1.api.smartthings.com:443/api/smartapps/installations/your-app-id/doorStatus",
+  "requestType": "POST",
+  "noDefaults":true,
+  "headers": {
+    "X-Application": "Door status",
+    "X-Timestamp": "{{PARTICLE_PUBLISHED_AT}}",
+    "Authorization": "Bearer your-auth-token"
+  },
+  "json": {
+    "status": "{{PARTICLE_EVENT_VALUE}}",
+    "coreid": "{{PARTICLE_DEVICE_ID}}"
+  }
+}
