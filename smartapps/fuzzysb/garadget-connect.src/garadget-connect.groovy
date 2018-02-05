@@ -78,9 +78,12 @@ def mainPage(){
     	createAccessToken()
        	log.debug "About to create Smarthings Garadget access token."
         getToken(garadgetUsername, garadgetPassword)
+        if (state.garadgetAccessToken) {
+            log.debug "About to associate Smarthings WebHook."
+            createWebHook()
+        }
     }
     if (state.garadgetAccessToken){
-        createWebHook()
     	result.success = true
     }
 
@@ -155,10 +158,8 @@ def createChildDevice(deviceFile, dni, name, label) {
 
 def listDevices() {
 	log.debug "In listDevices"
-
-	def options = getDeviceList()
-    // testing
     createWebHook()
+	def options = getDeviceList()
 	dynamicPage(name: "listDevices", title: "Choose devices", install: true) {
 		section("Devices") {
 			input "devices", "enum", title: "Select Device(s)", required: false, multiple: true, options: options, submitOnChange: true
@@ -289,8 +290,8 @@ def updated() {
 
 def uninstalled() {
   log.debug "Uninstalling Garadget (Connect)"
-  deleteToken()
   deleteWebHook()
+  deleteToken()
   removeChildDevices(getChildDevices())
   log.debug "Garadget (Connect) Uninstalled"
 
@@ -375,7 +376,7 @@ private sendCommand(method, user, pass, command) {
                 }
                 break
             case "createWebHook":
-                log.debug "Executing createWebHook 'sendCommand' ${request}"
+                log.debug "Executing createWebHook 'sendCommand'"
                 httpPostJson(request) { resp ->
                     log.debug("createWebHook result: ${resp.status}:${resp.data}")
                     if(resp.status == 201) {
