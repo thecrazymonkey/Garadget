@@ -420,7 +420,7 @@ private parseResponse(resp) {
 def poll() {
     log.debug "Executing - Service Manager - poll() - "
     // testing
-    createWebHook()
+//    createWebHook()
 //	getDeviceList();
 	getAllChildDevices().each {
         it.statusCommand()
@@ -461,8 +461,9 @@ void createWebHook() {
             url: getServerUrl()+"/api/smartapps/installations/${app.id}/doorStatus",
             requestType: "POST",
             noDefaults:"true",
-            headers: "{\"Authorization\": \"Bearer ${state.accessToken}\",\"X-Timestamp\": {{PARTICLE_PUBLISHED_AT}},\"X-Application\":\"Door status\"}",
-            json: "{\"status\": \"{{PARTICLE_EVENT_VALUE}}\", \"coreid\": \"{{PARTICLE_DEVICE_ID}}}\"}"
+            headers: [Authorization: "Bearer ${state.accessToken}"],
+            json: [status: "{{PARTICLE_EVENT_VALUE}}",
+                   coreid: "{{PARTICLE_DEVICE_ID}}"]
         ]
         sendCommand("createWebHook","${garadgetUsername}","${garadgetPassword}",body)
         log.debug "Created Particle WebHook"
