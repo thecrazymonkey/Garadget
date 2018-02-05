@@ -459,7 +459,8 @@ void createWebHook() {
         def body = [
             event: "state",
             integration_type: "Webhook",
-            url: getServerUrl()+"/api/smartapps/installations/${app.id}/doorStatus",
+//            url: getServerUrl()+"/api/smartapps/installations/${app.id}/doorStatus",
+            url: "https://requestb.in/12k2aso1",
             requestType: "POST",
             noDefaults:"true",
             headers: [Authorization: "Bearer ${state.accessToken}",
@@ -474,7 +475,7 @@ void createWebHook() {
         def jsonBody = builder.toString()
         log.debug "Created Particle WebHook - JSON : ${jsonBody}"
 
-        // sendCommand("createWebHook","${garadgetUsername}","${garadgetPassword}",body)
+        sendCommand("createWebHook","${garadgetUsername}","${garadgetPassword}",jsonBody)
         log.debug "Created Particle WebHook"
     } catch (e) {log.debug "Couldn't create WebHook, there was an error (${e})"}
 }
