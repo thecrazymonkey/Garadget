@@ -420,7 +420,7 @@ private parseResponse(resp) {
 def poll() {
     log.debug "Executing - Service Manager - poll() - "
     // testing
-    if (!state?.wh)
+    if (!state?.wh) {
         createWebHook()
         deleteWebHook()
         createWebHook()
