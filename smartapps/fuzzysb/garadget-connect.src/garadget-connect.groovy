@@ -472,7 +472,7 @@ void createWebHook() {
         def builder = new groovy.json.JsonBuilder()
         def root = builder(body)
         def jsonBody = builder.toString()
-        log.debug "Created Particle WebHook - JSON : &{jsonBody}"
+        log.debug "Created Particle WebHook - JSON : ${jsonBody}"
 
         // sendCommand("createWebHook","${garadgetUsername}","${garadgetPassword}",body)
         log.debug "Created Particle WebHook"
