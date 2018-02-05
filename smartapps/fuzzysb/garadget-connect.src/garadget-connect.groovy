@@ -158,7 +158,6 @@ def createChildDevice(deviceFile, dni, name, label) {
 
 def listDevices() {
 	log.debug "In listDevices"
-    createWebHook()
 	def options = getDeviceList()
 	dynamicPage(name: "listDevices", title: "Choose devices", install: true) {
 		section("Devices") {
