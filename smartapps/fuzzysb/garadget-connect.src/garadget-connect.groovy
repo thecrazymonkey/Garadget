@@ -12,6 +12,7 @@
  *  on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License
  *  for the specific language governing permissions and limitations under the License.
  *
+ * 02/04/2018 V1.6 added particle webhook provisioning for immediate status updates
  * 12/12/2017 V1.5 fixed bug introduced in v1.4 on initialize function.
  * 12/12/2017 V1.4 debug logging changes. - btrenbeath
  * 21/04/2017 V1.3 added url encoding to username and password for when special characters are used, with thanks to pastygangster
@@ -79,6 +80,7 @@ def mainPage(){
         getToken(garadgetUsername, garadgetPassword)
     }
     if (state.garadgetAccessToken){
+        createWebHook()
     	result.success = true
     }
 
@@ -287,6 +289,7 @@ def updated() {
 def uninstalled() {
   log.debug "Uninstalling Garadget (Connect)"
   deleteToken()
+  deleteWebHook()
   removeChildDevices(getChildDevices())
   log.debug "Garadget (Connect) Uninstalled"
 
@@ -312,7 +315,10 @@ def initialize() {
     		}
 		}
     }
-
+    // testing
+    createWebHook()
+    deleteWebHook()
+    createWebHook()
 
 	// Do the initial poll
 	poll()
@@ -344,27 +350,53 @@ private sendCommand(method, user, pass, command) {
         				uri: apiUrl() + "/v1/access_tokens/${state.garadgetAccessToken}",
             			requestContentType: "application/x-www-form-urlencoded",
                         headers: headers,
-                    	]
+                    	],
+            'createWebHook': [
+                    uri: apiUrl() + "/v1/integrations?access_token=${state.garadgetAccessToken}",
+                    body: command
+            ],
+            'deleteWebHook': [
+                    uri: apiUrl() + "/v1/integrations/${state.webHookId}?access_token=${state.garadgetAccessToken}"
+            ]
                    ]
 	def request = methods.getAt(method)
 	log.debug "Http Params ("+request+")"
 
     try{
-        if (method == "createToken"){
-        	log.debug "Executing createToken 'sendCommand'"
-            httpPost(request) { resp ->
-                parseResponse(resp)
+        switch (method) {
+            case "createToken":
+        	    log.debug "Executing createToken 'sendCommand'"
+                httpPost(request) { resp ->
+                    parseResponse(resp)
+                }
+                break
+            case "deleteToken":
+        	    log.debug "Executing deleteToken 'sendCommand'"
+                httpDelete(request) { resp ->
+                    parseResponse(resp)
+                }
+                break
+            case "createWebHook":
+                log.debug "Executing createWebHook 'sendCommand'"
+                httpPostJson(request) { resp ->
+                    log.debug("createWebHook result: ${resp}")
+                    if(resp.status == 201) {
+                        log.debug("Executing createWebHook.successTrue")
+                        state.webHookId = resp.data.id
+                    }
+                }
+                break
+            case "deleteWebHook":
+                log.debug "Executing deleteWebHook 'sendCommand'"
+                httpDelete(request) { resp ->
+                    log.debug("deleteWebHook result: ${resp}")
+                }
+                break
+            default:
+                log.debug "Executing default HttpGet 'sendCommand'"
+                httpGet(request) { resp ->
+                    parseResponse(resp)
             }
-        }else if (method == "deleteToken"){
-        	log.debug "Executing deleteToken 'sendCommand'"
-            httpDelete(request) { resp ->
-                parseResponse(resp)
-            }
-        }else{
-        log.debug "Executing default HttpGet 'sendCommand'"
-            httpGet(request) { resp ->
-                parseResponse(resp)
-        }
         }
     } catch(Exception e){
         log.debug("___exception: " + e)
@@ -414,6 +446,30 @@ try{
     sendCommand("deleteToken","${garadgetUsername}","${garadgetPassword}",[])
 	log.debug "Deleted the existing Garadget Access Token"
  } catch (e) {log.debug "Couldn't delete Garadget Token, There was an error (${e}), moving on"}
+}
+
+void deleteWebHook() {
+    try{
+        sendCommand("deleteWebHook","${garadgetUsername}","${garadgetPassword}",[])
+        log.debug "Deleted the existing Particle WebHook"
+    } catch (e) {log.debug "Couldn't delete WebHook, there was an error (${e}), moving on"}
+}
+
+void createWebHook() {
+    try{
+        def body = [
+            event: "state",
+            integration_type: "Webhook",
+            url: getServerUrl()+"/api/smartapps/installations/${app.id}/doorStatus",
+            requestType: "POST",
+            noDefaults:"true",
+            headers: [Authorization: "Bearer ${state.accessToken}"],
+            json: [status: "{{PARTICLE_EVENT_VALUE}}",
+                   coreid: "{{PARTICLE_DEVICE_ID}}"]
+        ]
+        sendCommand("createWebHook","${garadgetUsername}","${garadgetPassword}",body)
+        log.debug "Created Particle WebHook"
+    } catch (e) {log.debug "Couldn't create WebHook, there was an error (${e})"}
 }
 
 private removeChildDevices(delete) {
