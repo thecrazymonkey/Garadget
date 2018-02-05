@@ -349,6 +349,7 @@ private sendCommand(method, user, pass, command) {
                     	],
             'createWebHook': [
                     uri: apiUrl() + "/v1/integrations?access_token=${state.garadgetAccessToken}",
+                    requestContentType: "application/json",
                     body: command
             ],
             'deleteWebHook': [
@@ -461,11 +462,19 @@ void createWebHook() {
             url: getServerUrl()+"/api/smartapps/installations/${app.id}/doorStatus",
             requestType: "POST",
             noDefaults:"true",
-            headers: [Authorization: "Bearer ${state.accessToken}"],
+            headers: [Authorization: "Bearer ${state.accessToken}",
+                     "X-Application": "Door status",
+                     "X-Timestamp": "{{PARTICLE_PUBLISHED_AT}}"
+            ],
             json: [status: "{{PARTICLE_EVENT_VALUE}}",
                    coreid: "{{PARTICLE_DEVICE_ID}}"]
         ]
-        sendCommand("createWebHook","${garadgetUsername}","${garadgetPassword}",body)
+        def builder = new groovy.json.JsonBuilder()
+        def root = builder(body)
+        def jsonBody = builder.toString()
+        log.debug "Created Particle WebHook - JSON : &{jsonBody}"
+
+        // sendCommand("createWebHook","${garadgetUsername}","${garadgetPassword}",body)
         log.debug "Created Particle WebHook"
     } catch (e) {log.debug "Couldn't create WebHook, there was an error (${e})"}
 }
