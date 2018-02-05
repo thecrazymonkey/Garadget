@@ -348,8 +348,7 @@ private sendCommand(method, user, pass, command) {
                         headers: headers
                     	],
             'createWebHook': [
-//                    uri: apiUrl() + "/v1/integrations?access_token=${state.garadgetAccessToken}",
-                    uri: "https://requestb.in/12k2aso1",
+                    uri: apiUrl() + "/v1/integrations?access_token=${state.garadgetAccessToken}",
                     requestContentType: "application/json",
                     body: command
             ],
@@ -423,6 +422,7 @@ def poll() {
     log.debug "Executing - Service Manager - poll() - "
     // testing
     createWebHook()
+    deleteWebHook()
 //	getDeviceList();
 	getAllChildDevices().each {
         it.statusCommand()
@@ -471,8 +471,7 @@ void createWebHook() {
                    coreid: "{{PARTICLE_DEVICE_ID}}"]
         ]
         def builder = new groovy.json.JsonBuilder()
-        def root = builder(body)
-        def jsonBody = builder.toString()
+        def jsonBody = builder(body).toString()
         log.debug "Created Particle WebHook - JSON : ${jsonBody}"
 
         sendCommand("createWebHook","${garadgetUsername}","${garadgetPassword}",jsonBody)
