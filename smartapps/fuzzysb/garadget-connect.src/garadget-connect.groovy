@@ -420,12 +420,7 @@ private parseResponse(resp) {
 def poll() {
     log.debug "Executing - Service Manager - poll() - "
     // testing
-    if (!state?.wh) {
-        createWebHook()
-        deleteWebHook()
-        createWebHook()
-        state.wh=true
-    }
+    createWebHook()
 //	getDeviceList();
 	getAllChildDevices().each {
         it.statusCommand()
