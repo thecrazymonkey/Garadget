@@ -315,10 +315,6 @@ def initialize() {
     		}
 		}
     }
-    // testing
-    createWebHook()
-    deleteWebHook()
-    createWebHook()
 
 	// Do the initial poll
 	poll()
@@ -422,7 +418,14 @@ private parseResponse(resp) {
 }
 
 def poll() {
-	log.debug "Executing - Service Manager - poll() - "
+    log.debug "Executing - Service Manager - poll() - "
+    // testing
+    if (!state?.wh)
+        createWebHook()
+        deleteWebHook()
+        createWebHook()
+        state.wh=true
+    }
 //	getDeviceList();
 	getAllChildDevices().each {
         it.statusCommand()
