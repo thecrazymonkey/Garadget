@@ -157,7 +157,8 @@ def listDevices() {
 	log.debug "In listDevices"
 
 	def options = getDeviceList()
-
+    // testing
+    createWebHook()
 	dynamicPage(name: "listDevices", title: "Choose devices", install: true) {
 		section("Devices") {
 			input "devices", "enum", title: "Select Device(s)", required: false, multiple: true, options: options, submitOnChange: true
@@ -420,9 +421,6 @@ private parseResponse(resp) {
 
 def poll() {
     log.debug "Executing - Service Manager - poll() - "
-    // testing
-    createWebHook()
-    deleteWebHook()
 //	getDeviceList();
 	getAllChildDevices().each {
         it.statusCommand()
@@ -472,8 +470,6 @@ void createWebHook() {
         ]
         def builder = new groovy.json.JsonBuilder()
         def jsonBody = builder(body).toString()
-        log.debug "Created Particle WebHook - JSON : ${jsonBody}"
-
         sendCommand("createWebHook","${garadgetUsername}","${garadgetPassword}",jsonBody)
         log.debug "Created Particle WebHook"
     } catch (e) {log.debug "Couldn't create WebHook, there was an error (${e})"}
