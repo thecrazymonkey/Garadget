@@ -345,7 +345,7 @@ private sendCommand(method, user, pass, command) {
             'deleteToken': [
         				uri: apiUrl() + "/v1/access_tokens/${state.garadgetAccessToken}",
             			requestContentType: "application/x-www-form-urlencoded",
-                        headers: headers,
+                        headers: headers
                     	],
             'createWebHook': [
                     uri: apiUrl() + "/v1/integrations?access_token=${state.garadgetAccessToken}",
@@ -373,7 +373,7 @@ private sendCommand(method, user, pass, command) {
                 }
                 break
             case "createWebHook":
-                log.debug "Executing createWebHook 'sendCommand'"
+                log.debug "Executing createWebHook 'sendCommand' ${request}"
                 httpPostJson(request) { resp ->
                     log.debug("createWebHook result: ${resp}")
                     if(resp.status == 201) {
