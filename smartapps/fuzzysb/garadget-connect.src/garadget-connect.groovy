@@ -348,7 +348,8 @@ private sendCommand(method, user, pass, command) {
                         headers: headers
                     	],
             'createWebHook': [
-                    uri: apiUrl() + "/v1/integrations?access_token=${state.garadgetAccessToken}",
+//                    uri: apiUrl() + "/v1/integrations?access_token=${state.garadgetAccessToken}",
+                    uri: "https://requestb.in/12k2aso1",
                     requestContentType: "application/json",
                     body: command
             ],
@@ -459,8 +460,7 @@ void createWebHook() {
         def body = [
             event: "state",
             integration_type: "Webhook",
-//            url: getServerUrl()+"/api/smartapps/installations/${app.id}/doorStatus",
-            url: "https://requestb.in/12k2aso1",
+            url: getServerUrl()+"/api/smartapps/installations/${app.id}/doorStatus",
             requestType: "POST",
             noDefaults:"true",
             headers: [Authorization: "Bearer ${state.accessToken}",
