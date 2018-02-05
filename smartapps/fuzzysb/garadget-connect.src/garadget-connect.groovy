@@ -375,7 +375,7 @@ private sendCommand(method, user, pass, command) {
             case "createWebHook":
                 log.debug "Executing createWebHook 'sendCommand' ${request}"
                 httpPostJson(request) { resp ->
-                    log.debug("createWebHook result: ${resp}")
+                    log.debug("createWebHook result: ${resp.status}:${resp.data}")
                     if(resp.status == 201) {
                         log.debug("Executing createWebHook.successTrue")
                         state.webHookId = resp.data.id
