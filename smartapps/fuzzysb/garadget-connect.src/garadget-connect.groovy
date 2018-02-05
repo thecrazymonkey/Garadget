@@ -420,7 +420,7 @@ private parseResponse(resp) {
 def poll() {
     log.debug "Executing - Service Manager - poll() - "
     // testing
-    createWebHook()
+//    createWebHook()
 //	getDeviceList();
 	getAllChildDevices().each {
         it.statusCommand()
