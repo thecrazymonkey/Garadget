@@ -379,8 +379,8 @@ private sendCommand(method, user, pass, command) {
                 httpPostJson(request) { resp ->
                     log.debug("createWebHook result: ${resp.status}:${resp.data}")
                     if(resp.status == 201) {
-                        log.debug("Executing createWebHook.successTrue")
                         state.webHookId = resp.data.id
+                        log.debug("Executing createWebHook.successTrue - WH id: ${state.webHookId}")
                     }
                 }
                 break
