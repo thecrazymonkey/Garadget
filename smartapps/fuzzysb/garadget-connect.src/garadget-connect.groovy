@@ -469,7 +469,8 @@ void createWebHook() {
                    coreid: "{{PARTICLE_DEVICE_ID}}"]
         ]
         def builder = new groovy.json.JsonBuilder()
-        def jsonBody = builder(body).toString()
+        def root = builder(body)
+        def jsonBody = builder.toString()
         sendCommand("createWebHook","${garadgetUsername}","${garadgetPassword}",jsonBody)
         log.debug "Created Particle WebHook"
     } catch (e) {log.debug "Couldn't create WebHook, there was an error (${e})"}
