@@ -363,20 +363,21 @@ def on() {
 
 	log.debug ("Executing - on()")
 	openCommand()
-/*
-    def buttonPressTime =  new Date()
-    def myDelay = (state.mtt).toInteger()
-    def laterTime = new Date(now() + myDelay + 2000)
-   	log.debug ("TimeStamp - on() - Now: "+buttonPressTime)
-    log.debug ("Paramater Validation - on() - Garage Open time - myDelay")
-    log.debug ("TimeStamp - on() - +15: "+laterTime)
+    if (state.webHookId == null) {
+        // do this only when webhook is off
+        def buttonPressTime = new Date()
+        def myDelay = (state.mtt).toInteger()
+        def laterTime = new Date(now() + myDelay + 2000)
+        log.debug("TimeStamp - on() - Now: " + buttonPressTime)
+        log.debug("Paramater Validation - on() - Garage Open time - myDelay")
+        log.debug("TimeStamp - on() - +15: " + laterTime)
 
- 	sendEvent(name: 'status', value: 'opening')
-    log.debug ("Executing - on() - SendEvent opening")
+        sendEvent(name: 'status', value: 'opening')
+        log.debug("Executing - on() - SendEvent opening")
 
-    runOnce(laterTime, statusCommand, [overwrite: false])
-    log.debug ("Executing - on() - runOnce(statusCommand)")
-*/
+        runOnce(laterTime, statusCommand, [overwrite: false])
+        log.debug("Executing - on() - runOnce(statusCommand)")
+    }
 }
 
 def off() {
@@ -387,20 +388,21 @@ def off() {
 
 	log.debug ("Executing - off()")
 	closeCommand()
-/*
-    def buttonPressTime =  new Date()
-    def myDelay = (state.mtt).toInteger()
-    def laterTime = new Date(now() + myDelay + 2000)
-   	log.debug ("TimeStamp - off() - Now: "+buttonPressTime)
-    log.debug ("Paramater Validation - off() - Garage Open time - myDelay")
-    log.debug ("TimeStamp - off() - +15: "+laterTime)
+    if (state.webHookId == null) {
+        // do this only when webhook is off
+        def buttonPressTime = new Date()
+        def myDelay = (state.mtt).toInteger()
+        def laterTime = new Date(now() + myDelay + 2000)
+        log.debug("TimeStamp - off() - Now: " + buttonPressTime)
+        log.debug("Paramater Validation - off() - Garage Open time - myDelay")
+        log.debug("TimeStamp - off() - +15: " + laterTime)
 
-    sendEvent(name: 'status', value: 'closing')
-    log.debug ("Executing - off() - SendEvent closing")
+        sendEvent(name: 'status', value: 'closing')
+        log.debug("Executing - off() - SendEvent closing")
 
-    runOnce(laterTime, statusCommand, [overwrite: false])
-    log.debug ("Executing - off() - runOnce(statusCommand)")
-*/
+        runOnce(laterTime, statusCommand, [overwrite: false])
+        log.debug("Executing - off() - runOnce(statusCommand)")
+    }
 }
 
 def stop(){
