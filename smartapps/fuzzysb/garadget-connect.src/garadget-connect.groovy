@@ -106,6 +106,7 @@ def completePage() {
         section("WebHook") {
             input "webHookEnabled", "bool", title: "Enable WebHook", defaultValue: (state.webHookId != null), submitOnChange: true
         }
+        log.debug "WebHook setting ${webHookEnabled}; webHookId ${state.webHookId}"
         if (webHookEnabled) {
             if (state.webHookId != null) {
                 createWebHook()
@@ -406,7 +407,7 @@ private sendCommand(method, user, pass, command) {
             case "deleteWebHook":
                 log.debug "Executing deleteWebHook 'sendCommand'"
                 httpDelete(request) { resp ->
-                    log.debug("deleteWebHook result: ${resp}")
+                    log.debug("deleteWebHook result: ${resp.status}:${resp.data}")
                     state.webHookId = null
                 }
                 break
