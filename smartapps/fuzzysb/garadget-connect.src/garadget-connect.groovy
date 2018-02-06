@@ -110,9 +110,7 @@ def completePage() {
         if (webHookEnabled) {
             if (state.webHookId == null) {
                 createWebHook()
-                section {
-                    input(name: "WebHook", title: "WebHook created", required: false)
-                }
+                input(name: "WebHook", title: "WebHook created", required: false)
             }
         } else {
             if (state.webHookId != null) {
