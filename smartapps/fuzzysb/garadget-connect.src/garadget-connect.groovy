@@ -104,7 +104,7 @@ def completePage() {
             href url: buildRedirectUrl("receivedToken"), style: "embedded", required: false, title: "${getVendorName()} is now connected to SmartThings!", description: description
         }
         section("WebHook") {
-            input(name:"webHookEnabled", "bool", title: "Enable/Disable WebHook", defaultValue: (state.webHookId != null), submitOnChange: true)
+            input(name:"webHookEnabled", "bool", title: "Enable WebHook", defaultValue: (state.webHookId != null), submitOnChange: true)
         }
         log.debug "WebHook setting ${webHookEnabled}; webHookId ${state.webHookId}"
         if (webHookEnabled) {
