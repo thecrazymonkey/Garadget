@@ -79,7 +79,11 @@ def mainPage(){
        	log.debug "About to create Smarthings Garadget access token."
         getToken(garadgetUsername, garadgetPassword)
     }
-    if (state.garadgetAccessToken){
+    if (state.garadgetAccessToken) {
+        if (state.webHookId == null) {
+            log.debug "About to associate Smarthings WebHook."
+            createWebHook()
+        }
     	result.success = true
     }
 
@@ -100,15 +104,7 @@ def completePage() {
             href url: buildRedirectUrl("receivedToken"), style: "embedded", required: false, title: "${getVendorName()} is now connected to SmartThings!", description: description
         }
         section("WebHook") {
-            input "webHookEnabled", "bool", title: "Enable WebHook", defaultValue: false, submitOnChange: true
-            log.debug "WebHook setting ${webHookEnabled}; webHookId ${state.webHookId}"
-            if (webHookEnabled) {
-                createWebHook()
-                input(name: "WebHook", title: "WebHook created", required: false)
-            } else {
-                deleteWebHook()
-                input(name: "WebHook", title: "WebHook deleted", required: false)
-            }
+            paragraph "WebHook Enabled"
         }
     }
 }
