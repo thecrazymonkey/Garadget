@@ -97,28 +97,31 @@ def mainPage(){
 
 
 
-def completePage(){
-	def description = "Tap 'Next' to proceed"
-			return dynamicPage(name: "completePage", title: "Credentials Accepted!", nextPage: listDevices , uninstall: true, install:false) {
-				section { href url: buildRedirectUrl("receivedToken"), style:"embedded", required:false, title:"${getVendorName()} is now connected to SmartThings!", description:description }
-                section ("WebHook") {
-                    input "webHookEnabled", "bool", title: "Enable WebHook", defaultValue: (state.webHookId != null), submitOnChange: true
-                    if (webHookEnabled) {
-                        if (state.webHookId != null) {
-                            createWebHook()
-                            section {
-                                input(name: "WebHook", title: "WebHook created", required: false)
-                            }
-                        }
-                    } else {
-                        if (state.webHookId != null) {
-                            deleteWebHook()
-                            input(name: "WebHook", title: "WebHook deleted", required: false)
-                        }
-                    }
+def completePage() {
+    def description = "Tap 'Next' to proceed"
+    return dynamicPage(name: "completePage", title: "Credentials Accepted!", nextPage: listDevices, uninstall: true, install: false) {
+        section {
+            href url: buildRedirectUrl("receivedToken"), style: "embedded", required: false, title: "${getVendorName()} is now connected to SmartThings!", description: description
+        }
+        section("WebHook") {
+            input "webHookEnabled", "bool", title: "Enable WebHook", defaultValue: (state.webHookId != null), submitOnChange: true
+        }
+        if (webHookEnabled) {
+            if (state.webHookId != null) {
+                createWebHook()
+                section {
+                    input(name: "WebHook", title: "WebHook created", required: false)
                 }
-			}
+            }
+        } else {
+            if (state.webHookId != null) {
+                deleteWebHook()
+                input(name: "WebHook", title: "WebHook deleted", required: false)
+            }
+        }
+    }
 }
+
 
 def badAuthPage(){
 	log.debug "In badAuthPage"
