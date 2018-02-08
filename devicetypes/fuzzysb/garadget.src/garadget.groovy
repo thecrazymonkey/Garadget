@@ -142,19 +142,17 @@ def configure() {
 // Parse incoming webhook event
 private parseWHDoorStatus(req) {
     def status = req?.status
-    log.debug("parseWHDoorStatus: started "+status)
+    log.info("parseWHDoorStatus: started "+status)
     sendEvent(name: 'status', value: status)
     def time = '0s'
     sendEvent(name: 'lastAction', value: time)
     if(status == "open" || status == "closed"){
         sendEvent(name: 'contact', value: status, displayed: false)
-        // if you want more fancy then just schedule status call and let the WH processing return asap
+        // schedule status call and let the WH processing return asap
         // do it only for open or close, intermmediate states are not important
-        def laterTime = new Date(now() + 1000)
-        log.debug ("Schedule status check: "+laterTime)
-        runOnce(laterTime, statusCommand, [overwrite: true])
+        runIn(1, statusCommand, [overwrite: true])
     }
-    log.debug ("parseWHDoorStatus: done")
+    log.info ("parseWHDoorStatus: done")
 }
 
 // Parse incoming device messages to generate events
