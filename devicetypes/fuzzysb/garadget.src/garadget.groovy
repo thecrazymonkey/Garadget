@@ -191,7 +191,6 @@ private parseDoorConfigResponse(resp) {
     if(resp.status == 200) {
         log.debug("returnedresult: "+resp.data.result)
         def results = (resp.data.result).tokenize('|')
-        def vervalues = (results[0]).tokenize('=')
 
         results.each { value ->
             def resultValue = value.tokenize('=')
