@@ -12,7 +12,7 @@
  *  on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License
  *  for the specific language governing permissions and limitations under the License.
  *
- * 02/04/2018 V1.6 added particle webhook provisioning for immediate status updates
+ * 02/04/2018 V1.7 added particle webhook provisioning for immediate status updates
  * 12/12/2017 V1.5 fixed bug introduced in v1.4 on initialize function.
  * 12/12/2017 V1.4 debug logging changes. - btrenbeath
  * 21/04/2017 V1.3 added url encoding to username and password for when special characters are used, with thanks to pastygangster
