@@ -432,6 +432,7 @@ def poll() {
 	getAllChildDevices().each {
         it.statusCommand()
 	}
+    log.debug "Finished - Service Manager - poll() - "
 }
 
 private Boolean canInstallLabs() {
