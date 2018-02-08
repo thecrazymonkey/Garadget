@@ -252,7 +252,7 @@ def receivedToken() {
 }
 
 def doorStatus() {
-    log.debug "Reported status json: ${request.JSON}"
+    log.info "Reported status json: ${request.JSON}"
     // only coreid and status available
     if (request.JSON?.coreid != null) {
         getAllChildDevices().each {
@@ -429,7 +429,7 @@ private parseResponse(resp) {
 def poll() {
     log.debug "Executing - Service Manager - poll() - "
 //	getDeviceList();
-	getAllChildDevices().each {
+    getChildDevices(true).each {
         it.statusCommand()
 	}
     log.debug "Finished - Service Manager - poll() - "
