@@ -429,7 +429,7 @@ private parseResponse(resp) {
 def poll() {
     log.debug "Executing - Service Manager - poll() - "
 //	getDeviceList();
-    getChildDevices(true).each {
+	getAllChildDevices().each {
         it.statusCommand()
 	}
     log.debug "Finished - Service Manager - poll() - "
