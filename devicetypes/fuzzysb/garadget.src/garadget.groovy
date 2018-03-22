@@ -46,6 +46,7 @@ metadata {
     capability "Polling"
 		capability "Configuration"
 		capability "Garage Door Control"
+		capability "Door Control"
 
     attribute "reflection", "string"
     attribute "status", "string"
@@ -148,6 +149,7 @@ private parseWHDoorStatus(req) {
     sendEvent(name: 'lastAction', value: time)
     if(status == "open" || status == "closed"){
         sendEvent(name: 'contact', value: status, displayed: false)
+        sendEvent(name: 'door', value: status, displayed: false)
         // schedule status call and let the WH processing return asap
         // do it only for open or close, intermmediate states are not important
         runIn(1, statusCommand, [overwrite: true])
@@ -170,6 +172,7 @@ private parseDoorStatusResponse(resp) {
         sendEvent(name: 'status', value: status)
         if(status == "open" || status == "closed"){
         	sendEvent(name: 'contact', value: status, displayed: false)
+            sendEvent(name: 'door', value: status, displayed: false)
             }
         def time = timevalues[1]
         sendEvent(name: 'lastAction', value: time)
@@ -190,54 +193,54 @@ private parseDoorConfigResponse(resp) {
         log.debug("returnedresult: "+resp.data.result)
         def results = (resp.data.result).tokenize('|')
 
-        results.each { value ->
-            def resultValue = value.tokenize('=')
-            switch (resultValue[0]) {
-                case "ver": def ver = resultValue[1];
-                    log.debug ("GARADGET: Firmware Version (ver): " +ver);
-                    sendEvent(name: 'ver', value: ver, displayed: false);
-                    break;
+    		results.each { value ->
+            	def resultValue = value.tokenize('=')
+                switch (resultValue[0]) {
+                	case "ver": def ver = resultValue[1];
+                    			log.debug ("GARADGET: Firmware Version (ver): " +ver);
+                    			sendEvent(name: 'ver', value: ver, displayed: false);
+                                break;
 
-                case "rdt": def rdt = resultValue[1];
-                    log.debug ("GARADGET: Sensor Scan Interval (rdt): " +rdt);
-                    break;
+                    case "rdt": def rdt = resultValue[1];
+                    			log.debug ("GARADGET: Sensor Scan Interval (rdt): " +rdt);
+                                break;
 
-                case "mtt": def mtt = resultValue[1];
-                    state.mtt = mtt;
-                    log.debug ("GARADGET: Door Moving Time (mtt): " +mtt);
-                    break;
+                    case "mtt": def mtt = resultValue[1];
+                    			state.mtt = mtt;
+                                log.debug ("GARADGET: Door Moving Time (mtt): " +mtt);
+                                break;
 
-                case "rlt": def rlt = resultValue[1];
-                    log.debug ("GARADGET: Button Press time (rlt): " +rlt);
-                    break;
+                    case "rlt": def rlt = resultValue[1];
+                    			log.debug ("GARADGET: Button Press time (rlt): " +rlt);
+                                break;
 
-                case "rlp": def rlp = resultValue[1];
-                    log.debug ("GARADGET: Delay Between Consecutive Button Presses (rlp)" +rlp);
-                    break;
+                    case "rlp": def rlp = resultValue[1];
+                    			log.debug ("GARADGET: Delay Between Consecutive Button Presses (rlp)" +rlp);
+                                break;
 
-                case "srr": def srr = resultValue[1];
-                    log.debug ("GARADGET: Number of Sensor Feeds used in Averaging: " +srr);
-                    break;
+                    case "srr": def srr = resultValue[1];
+                    			log.debug ("GARADGET: Number of Sensor Feeds used in Averaging: " +srr);
+                                break;
 
-                case "srt": def srt = resultValue[1];
-                    log.debug ("GARADGET: Reflection Value below which door is 'open': " +srt);
-                    break;
+                    case "srt": def srt = resultValue[1];
+                    			log.debug ("GARADGET: Reflection Value below which door is 'open': " +srt);
+                                break;
 
-                case "aot": def aot = resultValue[1];
-                    log.debug ("GARADGET: Alert for Open Timeout in seconds: " +aot);
-                    break;
+                    case "aot": def aot = resultValue[1];
+                    			log.debug ("GARADGET: Alert for Open Timeout in seconds: " +aot);
+                                break;
 
-                case "ans": def ans = resultValue[1];
-                    log.debug ("GARADGET: Alert for night time start in minutes from midnight: " +ans);
-                    break;
+                    case "ans": def ans = resultValue[1];
+                    			log.debug ("GARADGET: Alert for night time start in minutes from midnight: " +ans);
+                                break;
 
-                case "ane": def ane = resultValue[1];
-                    log.debug ("GARADGET: Alert for night time end in minutes from midnight: " +ane );
-                    break;
+                    case "ane": def ane = resultValue[1];
+                    			log.debug ("GARADGET: Alert for night time end in minutes from midnight: " +ane );
+                                break;
 
-                default : log.debug ("GARADGET UNUSED CONFIG: " +resultValue[0] +" value of " +resultValue[1])
+                    default : log.debug ("GARADGET UNUSED CONFIG: " +resultValue[0] +" value of " +resultValue[1])
+                }
             }
-        }
 
 
     }else if(resp.status == 201){
@@ -390,6 +393,7 @@ def on() {
     log.debug ("TimeStamp - on() - +15: "+laterTime)
 
  	sendEvent(name: 'status', value: 'opening')
+ 	sendEvent(name: 'door', value: 'opening')
     log.debug ("Executing - on() - SendEvent opening")
 
     runOnce(laterTime, statusCommand, [overwrite: false])
@@ -414,6 +418,7 @@ def off() {
     log.debug ("TimeStamp - off() - +15: "+laterTime)
 
     sendEvent(name: 'status', value: 'closing')
+    sendEvent(name: 'door', value: 'closing')
     log.debug ("Executing - off() - SendEvent closing")
 
     runOnce(laterTime, statusCommand, [overwrite: false])
